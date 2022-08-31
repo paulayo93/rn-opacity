@@ -1,10 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useRef } from "react";
+import { StatusBar } from "expo-status-bar";
+import {
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Animated, // import the animated libriary
+} from "react-native";
 
 export default function App() {
+
+  const opacityAnimation = useRef(new Animated.Value(0.5)).current;
+
+  const opacityStyle = { opacity: opacityAnimation };
+
+  const animateElement = () => {
+
+    Animated.timing(opacityAnimation, {
+      toValue: 0,
+      duration: 1500,
+      useNativeDriver: false,
+    }).start(() => {
+      Animated.timing(opacityAnimation, {
+        toValue: 1,
+        duration: 1500,
+        useNativeDriver: false,
+      }).start()
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <TouchableWithoutFeedback onPress={() => animateElement()}>
+        <Animated.View style={[styles.box, opacityStyle]}></Animated.View>
+      </TouchableWithoutFeedback>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -13,8 +42,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  box: {
+    backgroundColor: "orange",
+    height: 200,
+    width: 200,
+    opacity: 0.5,
   },
 });
